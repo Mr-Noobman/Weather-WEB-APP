@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Weather App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="background-animation">
+        <div class="sun"></div>
+        <div class="moon"></div>
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+        <div class="cloud cloud4"></div>
+        <div class="cloud cloud5"></div>
+    </div>
+
+    <div class="weather-app">
+        <header class="app-header">
+            <form class="search-box" id="search-form">
+                <input type="text" id="city-input" placeholder="Enter city name..." aria-label="Enter city name">
+            </form>
+            <div class="header-buttons">
+                <button id="location-btn" type="button">Use My Location</button>
+                <div class="unit-toggle">
+                    <button id="celsius-btn" type="button" class="active" aria-pressed="true">°C</button>
+                    <button id="fahrenheit-btn" type="button" aria-pressed="false">°F</button>
+                </div>
+            </div>
+        </header>
+
+        <main id="weather-content-main" class="weather-content" style="display: none;">
+            <section class="current-weather card">
+                <div class="weather-icon" id="current-weather-icon"></div>
+                <div class="current-info">
+                    <h2 id="current-temp">--°</h2>
+                    <p id="current-city">City, Country</p>
+                    <p id="current-desc">Weather Description</p>
+                </div>
+            </section>
+            <section class="weather-details-card card">
+                <h3>Today's Highlights</h3>
+                <div class="current-details">
+                    <p id="current-humidity">Humidity: --%</p>
+                    <p id="current-wind">Wind: -- m/s</p>
+                    <p id="current-precipitation">Precipitation: -- mm</p>
+                </div>
+            </section>
+            <section class="five-day-forecast card">
+                <h3>5-Day Forecast</h3>
+                <div class="forecast-container" id="five-day-container"></div>
+            </section>
+            <section class="hourly-forecast card">
+                <h3 id="hourly-forecast-title">Hourly Forecast</h3>
+                <div class="hourly-container" id="hourly-container"></div>
+            </section>
+        </main>
+
+        <div id="loader" class="loader visible"></div>
+        <div id="error-message" class="error-message"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
