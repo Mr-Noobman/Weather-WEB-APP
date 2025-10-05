@@ -99,7 +99,7 @@ body {
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  height: 210px;
+  max-height: 210px;
   overflow-y: auto;
   z-index: 1000;
 }
@@ -118,8 +118,6 @@ body {
   background-color: var(--accent-color);
   color: var(--primary-color);
 }
-
-/* End of Live Search Styles */
 
 .header-buttons {
   display: flex;
@@ -427,6 +425,14 @@ body {
   .weather-app {
     padding: 18px;
   }
+
+  /* Responsive Toast Notification with !important to force override */
+  .toast {
+    top: 20px !important;
+    bottom: auto !important;
+    width: calc(100% - 40px) !important;
+    transform: translate(-50%, -150px) !important;
+  }
 }
 
 /* === DYNAMIC BACKGROUND ANIMATION STYLES === */
@@ -458,11 +464,7 @@ body {
   transform: scale(1.5);
   opacity: 0.4;
   animation-duration: 75s;
-  box-shadow:
-    60px -15px 20px 15px rgba(255, 255, 255, 0.95),
-    -40px 0px 30px 10px rgba(255, 255, 255, 0.95),
-    -130px 10px 40px 0px rgba(255, 255, 255, 0.95),
-    -90px -30px 30px 15px rgba(255, 255, 255, 0.95);
+  box-shadow: 60px -15px 20px 15px rgba(255, 255, 255, 0.95), -40px 0 30px 10px rgba(255, 255, 255, 0.95), -130px 10px 40px 0 rgba(255, 255, 255, 0.95), -90px -30px 30px 15px rgba(255, 255, 255, 0.95);
 }
 
 .cloud2 {
@@ -471,12 +473,7 @@ body {
   opacity: 0.55;
   animation-duration: 60s;
   animation-delay: -10s;
-  box-shadow:
-    80px -30px 30px 20px rgba(255, 255, 255, 0.95),
-    -60px -10px 40px 15px rgba(255, 255, 255, 0.95),
-    -150px 0px 50px 10px rgba(255, 255, 255, 0.95),
-    -110px -40px 40px 20px rgba(255, 255, 255, 0.95),
-    140px -20px 40px 15px rgba(255, 255, 255, 0.95);
+  box-shadow: 80px -30px 30px 20px rgba(255, 255, 255, 0.95), -60px -10px 40px 15px rgba(255, 255, 255, 0.95), -150px 0 50px 10px rgba(255, 255, 255, 0.95), -110px -40px 40px 20px rgba(255, 255, 255, 0.95), 140px -20px 40px 15px rgba(255, 255, 255, 0.95);
 }
 
 .cloud3 {
@@ -484,10 +481,7 @@ body {
   transform: scale(2.2);
   opacity: 0.7;
   animation-duration: 45s;
-  box-shadow:
-    90px -40px 40px 25px #fff, -70px -20px 50px 20px #fff,
-    -160px 10px 60px 15px #fff, -120px -50px 50px 25px #fff,
-    150px -30px 50px 20px #fff;
+  box-shadow: 90px -40px 40px 25px #fff, -70px -20px 50px 20px #fff, -160px 10px 60px 15px #fff, -120px -50px 50px 25px #fff, 150px -30px 50px 20px #fff;
 }
 
 .cloud4 {
@@ -496,10 +490,7 @@ body {
   opacity: 0.5;
   animation-duration: 55s;
   animation-delay: -25s;
-  box-shadow:
-    50px -25px 25px 18px rgba(255, 255, 255, 0.95),
-    -50px -5px 35px 12px rgba(255, 255, 255, 0.95),
-    -140px 5px 45px 5px rgba(255, 255, 255, 0.95);
+  box-shadow: 50px -25px 25px 18px rgba(255, 255, 255, 0.95), -50px -5px 35px 12px rgba(255, 255, 255, 0.95), -140px 5px 45px 5px rgba(255, 255, 255, 0.95);
 }
 
 .cloud5 {
@@ -508,13 +499,10 @@ body {
   opacity: 0.65;
   animation-duration: 48s;
   animation-delay: -15s;
-  box-shadow:
-    70px -35px 35px 22px #fff, -65px -15px 45px 18px #fff,
-    -155px 5px 55px 12px #fff;
+  box-shadow: 70px -35px 35px 22px #fff, -65px -15px 45px 18px #fff, -155px 5px 55px 12px #fff;
 }
 
-body.weather-clouds .cloud,
-body.weather-rain .cloud {
+body.weather-clouds .cloud, body.weather-rain .cloud {
   opacity: 1;
 }
 
@@ -546,8 +534,7 @@ body.weather-rain .cloud {
   }
 }
 
-.sun,
-.moon {
+.sun, .moon {
   opacity: 0;
   transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }
@@ -606,14 +593,4 @@ body.weather-clear-night .weather-app {
   border-color: rgba(240, 240, 240, 0.5);
   box-shadow: 0 8px 32px 0 rgba(240, 240, 240, 0.12);
   transition: border-color 1s ease-in-out, box-shadow 1s ease-in-out;
-}
-
-/* --- Toast Notification for Mobile --- */
-@media (max-width: 991px) {
-  .toast {
-    top: 20px;
-    bottom: auto;
-    width: calc(100% - 40px);
-    transform: translate(-50%, -150px);
-  }
 }

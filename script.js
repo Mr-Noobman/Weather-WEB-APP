@@ -8,8 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const fahrenheitBtn = document.getElementById("fahrenheit-btn");
   const weatherContent = document.getElementById("weather-content-main");
   const loader = document.getElementById("loader");
-  const toastNotification = document.getElementById("toast-notification"); // NEW: Toast Element
-  // ... (the rest of the element references are the same)
+  const toastNotification = document.getElementById("toast-notification");
+  const currentWeatherSection = document.querySelector(".current-weather");
+
   const current = {
     icon: document.getElementById("current-weather-icon"),
     temp: document.getElementById("current-temp"),
@@ -26,15 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- State Variables ---
   let currentUnit = "celsius";
   let weatherDataStore = null;
-  let toastTimeout; // NEW: To manage the toast timeout
+  let toastTimeout;
 
-  // --- NEW: Toast Notification Function ---
+  // --- Toast Notification Function ---
   function showToast(message) {
-    clearTimeout(toastTimeout); // Clear any existing toast timer
+    clearTimeout(toastTimeout);
     toastNotification.textContent = message;
     toastNotification.classList.add("show");
-
-    // Hide the toast after 3 seconds (3000 milliseconds)
     toastTimeout = setTimeout(() => {
       toastNotification.classList.remove("show");
     }, 3000);
@@ -57,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     try {
       const response = await fetch(`/api/searchCities?q=${encodeURIComponent(query)}`);
-      if (!response.ok) return; // Fail silently
+      if (!response.ok) return;
       const matches = await response.json();
       displaySuggestions(matches);
     } catch (error) {
@@ -90,17 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- SECURE DATA FETCHING ---
   async function getWeatherByCity(city) {
-    // MODIFIED: Don't hide content immediately, just show loader
     showLoader();
     try {
       const response = await fetch(`/api/getWeather?city=${encodeURIComponent(city)}`);
-      const data = await response.json(); // Always parse JSON
-
+      const data = await response.json();
       if (!response.ok) {
-        // Throw an error with the message from our backend
         throw new Error(data.error || `Error: ${response.status}`);
       }
-
       if (data.current && data.forecast) {
         weatherDataStore = { current: data.current, forecast: data.forecast };
         updateUI();
@@ -110,7 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } catch (err) {
       console.error("Frontend Fetch Error:", err);
-      // MODIFIED: Call our new non-disruptive error function
       showError(err.message);
     }
   }
@@ -136,25 +130,28 @@ document.addEventListener("DOMContentLoaded", () => {
     debouncedGetCitySuggestions(e.target.value.trim());
   });
 
+  celsiusBtn.addEventListener("click", () => setUnit("celsius"));
+  fahrenheitBtn.addEventListener("click", () => setUnit("fahrenheit"));
+
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
     suggestionsBox.style.display = "none";
     const q = cityInput.value.trim();
     if (!q || (weatherDataStore && q.toLowerCase() === weatherDataStore.current.name.toLowerCase())) {
-      return; // Don't search if input is empty or same as current city
+      return;
     }
     getWeatherByCity(q);
     cityInput.blur();
   });
-  // ... (Other event listeners are the same)
-  celsiusBtn.addEventListener("click", () => setUnit("celsius"));
-  fahrenheitBtn.addEventListener("click", () => setUnit("fahrenheit"));
+
   document.addEventListener("click", (e) => {
     if (!searchForm.contains(e.target)) {
       suggestionsBox.style.display = "none";
     }
   });
+
   locationBtn.addEventListener("click", getUserCoordinates);
+
   currentWeatherSection.addEventListener("click", () => {
     if (!weatherDataStore) return;
     updateBackground(weatherDataStore.current);
@@ -170,50 +167,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // --- UI and Helper Functions ---
-  // MODIFIED: Functions for showing/hiding content are now simpler
   function showLoader() {
     loader.classList.add("visible");
   }
 
   function showWeatherContent() {
     loader.classList.remove("visible");
-    // Show the main content if it's the first time loading
     if (weatherContent.style.display === "none") {
       weatherContent.style.display = "";
     }
   }
 
   function showError(msg) {
-    loader.classList.remove("visible"); // Always hide loader on error
-    showToast(msg); // Use the new toast notification
+    loader.classList.remove("visible");
+    showToast(msg);
   }
 
-  // ... (The rest of your functions are unchanged)
-  function updateUI() {/* ... */}
-  function createIconImg(iconCode) {/* ... */}
-  function setUnit(unit) {/* ... */}
-  function updateCurrentWeather() {/* ... */}
-  function getGroupedForecast() {/* ... */}
-  function updateFiveDayForecast() {/* ... */}
-  function updateHourlyForecast(date) {/* ... */}
-  function formatTemperature(tempC) {/* ... */}
-  function formatWindSpeed(speedMs) {/* ... */}
-  function generateRainDrops(count = 25) {/* ... */}
-  function updateBackground(data) {/* ... */}
-  function getUserCoordinates() {/* ... */}
-
-  // --- INITIALIZATION ---
-  function initializeApp() {
-    // Hide the main content initially until first load is successful
-    weatherContent.style.display = "none";
-    const lastCity = localStorage.getItem("lastCity") || "Dhaka";
-    if (lastCity) {
-      getWeatherByCity(lastCity);
-    }
-  }
-  initializeApp();
-
-  // --- PASTE UNCHANGED FUNCTIONS HERE ---
   function updateUI() {
     if (!weatherDataStore) return;
     updateCurrentWeather();
@@ -221,6 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const firstDay = Object.keys(getGroupedForecast())[0];
     if (firstDay) updateHourlyForecast(firstDay);
   }
+
   function createIconImg(iconCode) {
     const iconMapping = {
       "01d": "clear-day",
@@ -249,6 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
     img.loading = "lazy";
     return img;
   }
+
   function setUnit(unit) {
     if (currentUnit === unit) return;
     currentUnit = unit;
@@ -258,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fahrenheitBtn.setAttribute("aria-pressed", unit === "fahrenheit");
     updateUI();
   }
+
   function updateCurrentWeather() {
     const data = weatherDataStore.current;
     current.icon.innerHTML = "";
@@ -271,6 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
     current.precipitation.textContent = `Precipitation (1h): ${precip} mm`;
     updateBackground(data);
   }
+
   function getGroupedForecast() {
     const grouped = {};
     weatherDataStore.forecast.list.forEach(item => {
@@ -280,6 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     return grouped;
   }
+
   function updateFiveDayForecast() {
     const grouped = getGroupedForecast();
     fiveDayContainer.innerHTML = "";
@@ -317,6 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
       fiveDayContainer.firstChild.setAttribute("aria-current", "true");
     }
   }
+
   function updateHourlyForecast(date) {
     const dayData = getGroupedForecast()[date] || [];
     hourlyContainer.innerHTML = "";
@@ -333,14 +308,17 @@ document.addEventListener("DOMContentLoaded", () => {
       hourlyContainer.appendChild(wrap);
     });
   }
+
   function formatTemperature(tempC) {
     if (currentUnit === "fahrenheit") return Math.round((tempC * 9 / 5) + 32);
     return Math.round(tempC);
   }
+
   function formatWindSpeed(speedMs) {
     if (currentUnit === "fahrenheit") return `${(speedMs * 2.237).toFixed(1)} mph`;
     return `${speedMs.toFixed(1)} m/s`;
   }
+
   function generateRainDrops(count = 25) {
     const container = document.getElementById("background-animation");
     container.querySelectorAll(".drop").forEach(n => n.remove());
@@ -354,6 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
       container.appendChild(drop);
     }
   }
+
   function updateBackground(data) {
     const body = document.body;
     const weatherClasses = [
@@ -397,55 +376,48 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
     }
   }
-// Replace your entire getUserCoordinates function with this new one
 
-async function getUserCoordinates() {
-    // First, check if the necessary browser features are available
+  async function getUserCoordinates() {
     if (!navigator.geolocation || !navigator.permissions) {
       return showError("Geolocation is not supported by this browser.");
     }
-  
     showLoader();
-  
     try {
-      // Use the Permissions API to check the permission state
-      const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
-  
-      // Handle the case where permission has already been denied
-      if (permissionStatus.state === 'denied') {
-        showError("Location permission denied. Please enable it in browser settings.");
-        getWeatherByCity("Dhaka"); // Show a fallback city
+      const permissionStatus = await navigator.permissions.query({ name: "geolocation" });
+      if (permissionStatus.state === "denied") {
+        showError("Permission denied. Please enable location in browser settings.");
+        getWeatherByCity("Dhaka");
         return;
       }
-  
-      // If permission is 'granted' or 'prompt', we can ask for the location.
-      // The browser will only show the pop-up if the state is 'prompt'.
       navigator.geolocation.getCurrentPosition(
-        // Success Callback
         async (position) => {
-          try {
-            const { latitude, longitude } = position.coords;
-            const city = await getCityFromCoords(latitude, longitude);
-            if (city) {
-              cityInput.value = city;
-              localStorage.setItem("lastCity", city);
-              getWeatherByCity(city);
-            }
-          } catch (err) {
-             showError("An error occurred while resolving your location.");
+          const { latitude, longitude } = position.coords;
+          const city = await getCityFromCoords(latitude, longitude);
+          if (city) {
+            cityInput.value = city;
+            localStorage.setItem("lastCity", city);
+            getWeatherByCity(city);
           }
         },
-        // Error Callback (now only runs on a true error, like the user clicking "Block")
         (error) => {
           console.error("Geolocation Error:", error);
           showError("Could not get location. Showing fallback city.");
           getWeatherByCity("Dhaka");
-        }
+        },
       );
-  
     } catch (error) {
-      // This catches errors if the Permissions API itself fails for some reason
       showError("Could not check location permissions.");
     }
-}
+  }
+
+  // --- INITIALIZATION ---
+  function initializeApp() {
+    weatherContent.style.display = "none";
+    const lastCity = localStorage.getItem("lastCity") || "Dhaka";
+    if (lastCity) {
+      getWeatherByCity(lastCity);
+    }
+  }
+
+  initializeApp();
 });
