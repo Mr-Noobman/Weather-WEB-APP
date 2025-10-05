@@ -291,24 +291,20 @@ body {
 .loader {
   display: none;
   position: absolute;
-  /* To overlay content */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: rgba(10, 24, 40, 0.7);
-  /* Semi-transparent overlay */
   z-index: 1500;
   place-items: center;
   border-radius: 20px;
-  /* Match parent container */
 }
 
 .loader.visible {
   display: grid;
 }
 
-/* Spinner Animation within the Loader */
 .loader::after {
   content: "";
   width: 65px;
@@ -318,7 +314,6 @@ body {
   background-size: 30px 30px;
   animation: l10 1.5s infinite;
 }
-
 
 @keyframes l10 {
   0% {
@@ -344,8 +339,8 @@ body {
 
 /* --- Toast Notification Styles --- */
 .toast {
-  position: absolute;
-  bottom: 25px;
+  position: fixed;
+  bottom: 20px;
   left: 50%;
   transform: translate(-50%, 100px);
   opacity: 0;
@@ -423,7 +418,6 @@ body {
 
   .search-box {
     max-width: none;
-    /* Allow search box to fill width on mobile */
   }
 
   .search-box input {
@@ -491,10 +485,8 @@ body {
   opacity: 0.7;
   animation-duration: 45s;
   box-shadow:
-    90px -40px 40px 25px #fff,
-    -70px -20px 50px 20px #fff,
-    -160px 10px 60px 15px #fff,
-    -120px -50px 50px 25px #fff,
+    90px -40px 40px 25px #fff, -70px -20px 50px 20px #fff,
+    -160px 10px 60px 15px #fff, -120px -50px 50px 25px #fff,
     150px -30px 50px 20px #fff;
 }
 
@@ -517,11 +509,9 @@ body {
   animation-duration: 48s;
   animation-delay: -15s;
   box-shadow:
-    70px -35px 35px 22px #fff,
-    -65px -15px 45px 18px #fff,
+    70px -35px 35px 22px #fff, -65px -15px 45px 18px #fff,
     -155px 5px 55px 12px #fff;
 }
-
 
 body.weather-clouds .cloud,
 body.weather-rain .cloud {
@@ -616,4 +606,14 @@ body.weather-clear-night .weather-app {
   border-color: rgba(240, 240, 240, 0.5);
   box-shadow: 0 8px 32px 0 rgba(240, 240, 240, 0.12);
   transition: border-color 1s ease-in-out, box-shadow 1s ease-in-out;
+}
+
+/* --- Toast Notification for Mobile --- */
+@media (max-width: 991px) {
+  .toast {
+    top: 20px;
+    bottom: auto;
+    width: calc(100% - 40px);
+    transform: translate(-50%, -150px);
+  }
 }
