@@ -27,7 +27,9 @@
     <div class="weather-app">
         <header class="app-header">
             <form class="search-box" id="search-form">
-                <input type="text" id="city-input" placeholder="Enter city name..." aria-label="Enter city name">
+                <input type="text" id="city-input" placeholder="Enter city name..." aria-label="Enter city name"
+                    autocomplete="off">
+                <div id="suggestions-box" class="suggestions-box"></div>
             </form>
             <div class="header-buttons">
                 <button id="location-btn" type="button">Use My Location</button>
@@ -65,8 +67,9 @@
             </section>
         </main>
 
-        <div id="loader" class="loader visible"></div>
-        <div id="error-message" class="error-message"></div>
+        <div id="loader" class="loader"></div>
+        <div id="toast-notification" class="toast"></div>
+
     </div>
 
     <script src="script.js"></script>

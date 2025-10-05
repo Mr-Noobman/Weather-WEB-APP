@@ -62,11 +62,12 @@ body {
   display: flex;
   gap: 10px;
   flex-grow: 1;
+  position: relative;
+  max-width: 300px;
 }
 
 .search-box input {
   width: 100%;
-  max-width: 300px;
   padding: 10px 15px;
   border-radius: 20px;
   border: 1px solid var(--card-border);
@@ -85,6 +86,40 @@ body {
   border-color: var(--accent-color);
   box-shadow: 0 0 10px rgba(0, 188, 212, 0.25);
 }
+
+/* Styles for the Live Search Suggestions */
+.suggestions-box {
+  display: none;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  height: 210px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.suggestion-item {
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestion-item:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+}
+
+/* End of Live Search Styles */
 
 .header-buttons {
   display: flex;
@@ -253,25 +288,29 @@ body {
   border-radius: 4px;
 }
 
-.loader,
-.error-message {
+.loader {
   display: none;
-  text-align: center;
-  padding: 50px;
-  font-size: 1.2rem;
-  color: var(--font-color);
-}
-
-.error-message.visible {
-  display: block;
+  position: absolute;
+  /* To overlay content */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 24, 40, 0.7);
+  /* Semi-transparent overlay */
+  z-index: 1500;
+  place-items: center;
+  border-radius: 20px;
+  /* Match parent container */
 }
 
 .loader.visible {
-  display: block;
-  margin: 100px auto;
+  display: grid;
 }
 
-.loader {
+/* Spinner Animation within the Loader */
+.loader::after {
+  content: "";
   width: 65px;
   aspect-ratio: 1;
   --g: radial-gradient(farthest-side, #0000 calc(95% - 3px), var(--accent-color) calc(100% - 3px) 98%, #0000 101%) no-repeat;
@@ -279,6 +318,7 @@ body {
   background-size: 30px 30px;
   animation: l10 1.5s infinite;
 }
+
 
 @keyframes l10 {
   0% {
@@ -300,6 +340,30 @@ body {
   100% {
     background-position: 100% 100%, 0 0, 0 100%;
   }
+}
+
+/* --- Toast Notification Styles --- */
+.toast {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translate(-50%, 100px);
+  opacity: 0;
+  padding: 12px 20px;
+  background-color: #d32f2f;
+  color: #fff;
+  border-radius: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  text-align: center;
+  z-index: 2000;
+  pointer-events: none;
+  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+.toast.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
 }
 
 /* --- RESPONSIVE DESIGN --- */
@@ -355,6 +419,11 @@ body {
   .app-header {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .search-box {
+    max-width: none;
+    /* Allow search box to fill width on mobile */
   }
 
   .search-box input {
