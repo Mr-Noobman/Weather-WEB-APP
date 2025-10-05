@@ -310,7 +310,7 @@ body {
   --g: radial-gradient(farthest-side, #0000 calc(95% - 3px), var(--accent-color) calc(100% - 3px) 98%, #0000 101%) no-repeat;
   background: var(--g), var(--g), var(--g);
   background-size: 30px 30px;
-  animation: l10 1.5s infinite;
+  animation: l10 1.s infinite;
 }
 
 @keyframes l10 {
@@ -338,10 +338,7 @@ body {
 /* --- Toast Notification Styles --- */
 .toast {
   position: fixed;
-  bottom: 20px;
   left: 50%;
-  transform: translate(-50%, 100px);
-  opacity: 0;
   padding: 12px 20px;
   background-color: #d32f2f;
   color: #fff;
@@ -351,12 +348,13 @@ body {
   text-align: center;
   z-index: 2000;
   pointer-events: none;
+  opacity: 0;
   transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
-}
 
-.toast.show {
-  transform: translate(-50%, 0);
-  opacity: 1;
+  /* Set initial position based on screen size */
+  bottom: 20px;
+  transform: translate(-50%, 100px);
+  /* Default start position (desktop) */
 }
 
 /* --- RESPONSIVE DESIGN --- */
@@ -426,12 +424,12 @@ body {
     padding: 18px;
   }
 
-  /* Responsive Toast Notification with !important to force override */
+  /* Set initial mobile position for the toast */
   .toast {
-    top: 20px !important;
-    bottom: auto !important;
-    width: calc(100% - 40px) !important;
-    transform: translate(-50%, -150px) !important;
+    top: 20px;
+    bottom: auto;
+    width: calc(100% - 40px);
+    transform: translate(-50%, -150px);
   }
 }
 

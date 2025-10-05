@@ -29,13 +29,26 @@ document.addEventListener("DOMContentLoaded", () => {
   let weatherDataStore = null;
   let toastTimeout;
 
-  // --- Toast Notification Function ---
+  // --- NEW RESPONSIVE Toast Notification Function ---
   function showToast(message) {
     clearTimeout(toastTimeout);
     toastNotification.textContent = message;
-    toastNotification.classList.add("show");
+
+    // Make it visible and apply the correct "show" transform
+    toastNotification.style.opacity = 1;
+    toastNotification.style.transform = "translate(-50%, 0)";
+
+    // Set a timer to hide it again
     toastTimeout = setTimeout(() => {
-      toastNotification.classList.remove("show");
+      toastNotification.style.opacity = 0;
+      // Check window width AGAIN to apply the correct "hide" transform
+      if (window.innerWidth <= 991) {
+        // Mobile: Hide by moving UP
+        toastNotification.style.transform = "translate(-50%, -150px)";
+      } else {
+        // Desktop: Hide by moving DOWN
+        toastNotification.style.transform = "translate(-50%, 100px)";
+      }
     }, 3000);
   }
 
